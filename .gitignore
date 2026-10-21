@@ -9,12 +9,14 @@ recipient.pub
 *.husk-unapplied.patch
 
 # secrets and local config
-.env
-.env.*
 
 # editor / tool state
 .idea/
-.vscode/
 .claude/
 *.swp
 .DS_Store
+branch_structure.json
+temp_auto_push.bat
+temp_interactive_push.bat
+config.bat
+node_modules
