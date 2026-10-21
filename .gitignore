@@ -1,0 +1,20 @@
+/target/
+
+# backups and key material must never be committed
+*.husk
+*.husk.partial
+*.key
+recipient.pub
+.husk-backup-*
+*.husk-unapplied.patch
+
+# secrets and local config
+.env
+.env.*
+
+# editor / tool state
+.idea/
+.vscode/
+.claude/
+*.swp
+.DS_Store

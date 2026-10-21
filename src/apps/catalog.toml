@@ -1,0 +1,235 @@
+# Built-in catalog of simple apps: detect, copy config files, optionally hint how to
+# install. Each entry becomes one generic handler (see src/apps/generic.rs).
+#
+# Users extend or override this with ~/.config/husk/apps.toml (same format); an entry
+# with the same `id` replaces the built-in one.
+#
+# Fields:
+#   id            [a-z0-9_-]+, stable; also the key under [software] in backup.toml
+#   display_name  shown in the backup plan
+#   detect_binary binary looked up on PATH                       (optional)
+#   detect_paths  any existing path marks the app present (OR)   (optional)
+#   capture_files exact files copied verbatim                    (optional)
+#   capture_globs glob patterns expanded at capture time         (optional)
+#   exclude_globs globs removed from the captured set            (optional)
+#   install_hint  text shown on restore if the app is missing; NEVER executed
+# `~` expands to $HOME. At least one of detect_binary / detect_paths is required.
+
+[[app]]
+id = "tmux"
+display_name = "tmux"
+detect_binary = "tmux"
+detect_paths = ["~/.tmux.conf", "~/.config/tmux"]
+capture_files = ["~/.tmux.conf", "~/.config/tmux/tmux.conf"]
+capture_globs = ["~/.config/tmux/*.conf"]
+# Plugins are NOT captured: tpm re-installs everything listed as `@plugin` in
+# tmux.conf, and recreating empty plugin dirs would make tpm think they are installed.
+install_hint = "install tmux (package: tmux); then press prefix + I inside tmux so tpm installs the plugins listed in tmux.conf"
+
+[[app]]
+id = "alacritty"
+display_name = "Alacritty"
+detect_binary = "alacritty"
+detect_paths = ["~/.config/alacritty"]
+capture_files = ["~/.config/alacritty/alacritty.toml", "~/.config/alacritty/alacritty.yml"]
+capture_globs = ["~/.config/alacritty/*.toml", "~/.config/alacritty/*.yml"]
+install_hint = "alacritty"
+
+[[app]]
+id = "kitty"
+display_name = "kitty"
+detect_binary = "kitty"
+detect_paths = ["~/.config/kitty"]
+capture_files = ["~/.config/kitty/kitty.conf"]
+capture_globs = ["~/.config/kitty/*.conf"]
+install_hint = "kitty"
+
+[[app]]
+id = "wezterm"
+display_name = "WezTerm"
+detect_binary = "wezterm"
+detect_paths = ["~/.config/wezterm", "~/.wezterm.lua"]
+capture_files = ["~/.wezterm.lua", "~/.config/wezterm/wezterm.lua"]
+capture_globs = ["~/.config/wezterm/*.lua"]
+install_hint = "wezterm (https://wezfurlong.org/wezterm/install/linux.html)"
+
+[[app]]
+id = "jetbrains_idea"
+display_name = "JetBrains IntelliJ IDEA (settings only)"
+detect_paths = ["~/.config/JetBrains/IntelliJIdea*", "~/.config/JetBrains/IdeaIC*"]
+capture_globs = [
+  "~/.config/JetBrains/IntelliJIdea*/options/*.xml",
+  "~/.config/JetBrains/IntelliJIdea*/keymaps/*.xml",
+  "~/.config/JetBrains/IntelliJIdea*/codestyles/*.xml",
+  "~/.config/JetBrains/IdeaIC*/options/*.xml",
+  "~/.config/JetBrains/IdeaIC*/keymaps/*.xml",
+  "~/.config/JetBrains/IdeaIC*/codestyles/*.xml",
+]
+# Project lists and stored credentials stay out of the backup.
+exclude_globs = ["**/recentProjects.xml", "**/recentSolutions.xml", "**/security.xml", "**/*token*", "**/*password*"]
+install_hint = "IntelliJ IDEA (JetBrains Toolbox: https://www.jetbrains.com/toolbox-app/)"
+
+[[app]]
+id = "jetbrains_pycharm"
+display_name = "JetBrains PyCharm (settings only)"
+detect_paths = ["~/.config/JetBrains/PyCharm*"]
+capture_globs = [
+  "~/.config/JetBrains/PyCharm*/options/*.xml",
+  "~/.config/JetBrains/PyCharm*/keymaps/*.xml",
+  "~/.config/JetBrains/PyCharm*/codestyles/*.xml",
+]
+exclude_globs = ["**/recentProjects.xml", "**/security.xml", "**/*token*", "**/*password*"]
+install_hint = "PyCharm (JetBrains Toolbox: https://www.jetbrains.com/toolbox-app/)"
+
+[[app]]
+id = "jetbrains_webstorm"
+display_name = "JetBrains WebStorm (settings only)"
+detect_paths = ["~/.config/JetBrains/WebStorm*"]
+capture_globs = [
+  "~/.config/JetBrains/WebStorm*/options/*.xml",
+  "~/.config/JetBrains/WebStorm*/keymaps/*.xml",
+  "~/.config/JetBrains/WebStorm*/codestyles/*.xml",
+]
+exclude_globs = ["**/recentProjects.xml", "**/security.xml", "**/*token*", "**/*password*"]
+install_hint = "WebStorm (JetBrains Toolbox: https://www.jetbrains.com/toolbox-app/)"
+
+[[app]]
+id = "jetbrains_goland"
+display_name = "JetBrains GoLand (settings only)"
+detect_paths = ["~/.config/JetBrains/GoLand*"]
+capture_globs = [
+  "~/.config/JetBrains/GoLand*/options/*.xml",
+  "~/.config/JetBrains/GoLand*/keymaps/*.xml",
+  "~/.config/JetBrains/GoLand*/codestyles/*.xml",
+]
+exclude_globs = ["**/recentProjects.xml", "**/security.xml", "**/*token*", "**/*password*"]
+install_hint = "GoLand (JetBrains Toolbox: https://www.jetbrains.com/toolbox-app/)"
+
+[[app]]
+id = "jetbrains_clion"
+display_name = "JetBrains CLion (settings only)"
+detect_paths = ["~/.config/JetBrains/CLion*"]
+capture_globs = [
+  "~/.config/JetBrains/CLion*/options/*.xml",
+  "~/.config/JetBrains/CLion*/keymaps/*.xml",
+  "~/.config/JetBrains/CLion*/codestyles/*.xml",
+]
+exclude_globs = ["**/recentProjects.xml", "**/security.xml", "**/*token*", "**/*password*"]
+install_hint = "CLion (JetBrains Toolbox: https://www.jetbrains.com/toolbox-app/)"
+
+[[app]]
+id = "jetbrains_rustrover"
+display_name = "JetBrains RustRover (settings only)"
+detect_paths = ["~/.config/JetBrains/RustRover*"]
+capture_globs = [
+  "~/.config/JetBrains/RustRover*/options/*.xml",
+  "~/.config/JetBrains/RustRover*/keymaps/*.xml",
+  "~/.config/JetBrains/RustRover*/codestyles/*.xml",
+]
+exclude_globs = ["**/recentProjects.xml", "**/security.xml", "**/*token*", "**/*password*"]
+install_hint = "RustRover (JetBrains Toolbox: https://www.jetbrains.com/toolbox-app/)"
+
+[[app]]
+id = "ranger"
+display_name = "ranger"
+detect_binary = "ranger"
+detect_paths = ["~/.config/ranger"]
+capture_files = ["~/.config/ranger/rc.conf", "~/.config/ranger/rifle.conf", "~/.config/ranger/commands.py", "~/.config/ranger/scope.sh"]
+capture_globs = ["~/.config/ranger/colorschemes/*.py", "~/.config/ranger/plugins/*.py"]
+install_hint = "ranger"
+
+[[app]]
+id = "neofetch"
+display_name = "neofetch"
+detect_binary = "neofetch"
+detect_paths = ["~/.config/neofetch"]
+capture_files = ["~/.config/neofetch/config.conf"]
+install_hint = "neofetch"
+
+[[app]]
+id = "fastfetch"
+display_name = "fastfetch"
+detect_binary = "fastfetch"
+detect_paths = ["~/.config/fastfetch"]
+capture_files = ["~/.config/fastfetch/config.jsonc"]
+capture_globs = ["~/.config/fastfetch/*.jsonc"]
+install_hint = "fastfetch"
+
+[[app]]
+id = "htop"
+display_name = "htop"
+detect_binary = "htop"
+detect_paths = ["~/.config/htop"]
+capture_files = ["~/.config/htop/htoprc"]
+install_hint = "htop"
+
+[[app]]
+id = "btop"
+display_name = "btop"
+detect_binary = "btop"
+detect_paths = ["~/.config/btop"]
+capture_files = ["~/.config/btop/btop.conf"]
+capture_globs = ["~/.config/btop/themes/*.theme"]
+install_hint = "btop"
+
+[[app]]
+id = "zellij"
+display_name = "Zellij"
+detect_binary = "zellij"
+detect_paths = ["~/.config/zellij"]
+capture_files = ["~/.config/zellij/config.kdl"]
+capture_globs = ["~/.config/zellij/layouts/*.kdl", "~/.config/zellij/themes/*.kdl"]
+install_hint = "zellij"
+
+[[app]]
+id = "lazygit"
+display_name = "lazygit"
+detect_binary = "lazygit"
+detect_paths = ["~/.config/lazygit"]
+capture_files = ["~/.config/lazygit/config.yml"]
+install_hint = "lazygit"
+
+[[app]]
+id = "direnv"
+display_name = "direnv (global config)"
+detect_binary = "direnv"
+detect_paths = ["~/.config/direnv"]
+capture_files = ["~/.config/direnv/direnvrc", "~/.config/direnv/direnv.toml"]
+capture_globs = ["~/.config/direnv/lib/*.sh"]
+# Per-project .envrc files travel with the repos category, not here.
+install_hint = "direnv"
+
+[[app]]
+id = "android_studio"
+display_name = "Android Studio (settings only)"
+detect_paths = ["~/.config/Google/AndroidStudio*"]
+capture_globs = [
+  "~/.config/Google/AndroidStudio*/options/*.xml",
+  "~/.config/Google/AndroidStudio*/keymaps/*.xml",
+  "~/.config/Google/AndroidStudio*/codestyles/*.xml",
+]
+# Same rationale as the JetBrains entries below: no project lists, no stored credentials.
+exclude_globs = ["**/recentProjects.xml", "**/security.xml", "**/*token*", "**/*password*"]
+install_hint = "Android Studio (https://developer.android.com/studio) or via JetBrains Toolbox"
+
+[[app]]
+id = "google_chrome"
+display_name = "Google Chrome (bookmarks only)"
+detect_binary = "google-chrome-stable"
+detect_paths = ["~/.config/google-chrome"]
+# Bookmarks is a plain JSON file with bookmarks only; it holds no history, cookies, or
+# saved passwords. Extensions are deliberately not captured: their packaged code and IDs
+# aren't portable, and the reliable way to get them back is signing into Chrome Sync.
+capture_globs = ["~/.config/google-chrome/Default/Bookmarks", "~/.config/google-chrome/Profile */Bookmarks"]
+install_hint = "Google Chrome (https://www.google.com/chrome/); sign into Chrome Sync afterwards to restore extensions"
+
+[[app]]
+id = "firefox"
+display_name = "Firefox (bookmarks only)"
+detect_binary = "firefox"
+detect_paths = ["~/.mozilla/firefox"]
+# Firefox periodically writes bookmark-only snapshots here (no history, no cookies,
+# no saved passwords) as compressed JSON; restoring means importing the newest one via
+# Bookmarks > Manage Bookmarks > Import Backup. Extensions: sign into Firefox Sync.
+capture_globs = ["~/.mozilla/firefox/*.default*/bookmarkbackups/*.jsonlz4"]
+install_hint = "Firefox (https://www.mozilla.org/firefox/); sign into Firefox Sync afterwards to restore extensions"
